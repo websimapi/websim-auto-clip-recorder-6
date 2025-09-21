@@ -61,7 +61,28 @@
       <div class="modal">
         <h3>Preview Clip</h3>
         <video id="modal-video" controls playsinline></video>
-        <button id="modal-close">Close</button>
+        <div class="modal-actions">
+          <button id="modal-close">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="edit-modal-backdrop" style="display: none;">
+      <div class="modal">
+        <h3>Edit Clip</h3>
+        <video id="edit-modal-video" controls playsinline></video>
+        <div class="trim-controls">
+          <div id="trim-slider-container"></div>
+          <div class="trim-times">
+            Start: <span id="trim-start-time">00:00</span>
+            End: <span id="trim-end-time">00:00</span>
+            Duration: <span id="trim-duration">00:00</span>
+          </div>
+        </div>
+        <div class="modal-actions">
+            <button id="edit-modal-cancel">Cancel</button>
+            <button id="edit-modal-save">Save Changes</button>
+        </div>
       </div>
     </div>
 

@@ -1,5 +1,7 @@
-export function createRecorder({ onNewRawClip, autoSplitOnCaptured, onIframeNavSplit }){
-  let captureStream=null, recorder=null, chunks=[], recording=false, currentClipStart=0, heur={ interval:null, videoEl:null, canvas:null, ctx:null };
+export function createRecorder({ onSessionFinished, autoSplitOnCaptured, onIframeNavSplit }){
+  let captureStream=null, recorder=null, recording=false;
+  let sessionChunks = [], clipEndMarkers = [];
+  let heur={ interval:null, videoEl:null, canvas:null, ctx:null };
 
   async function pickTab(){
     try{
@@ -13,29 +15,42 @@ export function createRecorder({ onNewRawClip, autoSplitOnCaptured, onIframeNavS
 
   function setupRecorder(){
     recorder = new MediaRecorder(captureStream, { mimeType:"video/webm;codecs=vp9,opus" });
-    chunks = [];
-    recorder.ondataavailable = e=>{ if(e.data && e.data.size>0) chunks.push(e.data); };
+    sessionChunks = [];
+    clipEndMarkers = [];
+    recorder.ondataavailable = e=>{ if(e.data && e.data.size>0) sessionChunks.push(e.data); };
     recorder.onstop = async ()=>{
-      if(!chunks.length){ if(recording){ currentClipStart=Date.now(); recorder.start(1000);} return; }
-      const rawBlob=new Blob(chunks,{type:"video/webm"}); chunks=[];
-      try{ await onNewRawClip(rawBlob); } finally { if(recording){ currentClipStart=Date.now(); recorder.start(1000);} }
+      if (sessionChunks.length > 0) {
+        onSessionFinished({ chunks: sessionChunks, markers: clipEndMarkers });
+      }
+      sessionChunks = [];
+      clipEndMarkers = [];
     };
   }
 
   function start(){
     if(!captureStream){ alert("Pick a tab first."); return; }
     if(recording) return;
-    setupRecorder(); recording=true; currentClipStart=Date.now(); recorder.start(1000);
+    setupRecorder(); 
+    recording=true; 
+    recorder.start(1000); // Use timeslice to get chunks periodically
     document.getElementById("btn-start").disabled=true;
     document.getElementById("btn-stop").disabled=false;
     document.getElementById("btn-split").disabled=false;
     if(autoSplitOnCaptured()) startHeuristics();
   }
 
-  function split(){ if(recorder && recording){ recorder.stop(); } }
+  function split(){ 
+    if(recorder && recording) {
+      // Just mark the split point, don't stop recording
+      clipEndMarkers.push(sessionChunks.length);
+    } 
+  }
 
   function stop(){
-    if(recorder && recording){ recording=false; recorder.stop(); }
+    if(recorder && recording){ 
+      recording=false; 
+      recorder.stop(); 
+    }
     if(captureStream){ captureStream.getTracks().forEach(t=>t.stop()); captureStream=null; }
     document.getElementById("btn-start").disabled=!captureStream;
     document.getElementById("btn-stop").disabled=true;
@@ -56,7 +71,6 @@ export function createRecorder({ onNewRawClip, autoSplitOnCaptured, onIframeNavS
   }
   function stopHeuristics(){ if(heur.interval) clearInterval(heur.interval); heur={ interval:null, videoEl:null, canvas:null, ctx:null }; }
 
-  // hook iframe navigation auto-split
   const iframe=document.getElementById("navigator");
   if(iframe){ iframe.addEventListener("load", ()=>{ if(recording && onIframeNavSplit()) split(); }); }
 
