@@ -1,5 +1,3 @@
-
-```javascript
 export const OUTRO_CLIPS = [
   { id: "clean_bright_f", label: "Clean Bright F", file: "/hey_clean_bright_f.mp3" },
   { id: "clean_bright_m", label: "Clean Bright M", file: "/hey_clean_bright_m.mp3" },

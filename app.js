@@ -99,4 +99,3 @@ els.modalBackdrop.addEventListener('click',(e)=>{ if(e.target===els.modalBackdro
 setupNavigator();
 initOutroSelector(els.outroGrid);
 loadClips().then(restored=>{ clips = restored; renderClips(); });
-/* ...existing code... */

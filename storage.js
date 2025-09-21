@@ -1,5 +1,3 @@
-
-```javascript
 import { set as idbSet, get as idbGet } from "idb-keyval";
 
 export async function saveClips(clips){
@@ -34,3 +32,4 @@ export async function loadClips(){
   }catch{}
   return [];
 }
+

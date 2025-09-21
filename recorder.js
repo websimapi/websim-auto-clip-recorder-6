@@ -1,5 +1,3 @@
-
-```javascript
 export function createRecorder({ onNewRawClip, autoSplitOnCaptured, onIframeNavSplit }){
   let captureStream=null, recorder=null, chunks=[], recording=false, currentClipStart=0, heur={ interval:null, videoEl:null, canvas:null, ctx:null };
 

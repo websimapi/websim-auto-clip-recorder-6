@@ -1,4 +1,3 @@
-/* ...existing code... */
 export async function composeClips(blobs, opts){
   const { outroSeconds=3, logoUrl, outroAudio, outroAudioRegion, width=1280, height=720, fps=30 } = opts;
 
@@ -196,4 +195,3 @@ export async function concatenateClips(blobs, opts) {
     try { ac.close(); } catch { }
     return done;
 }
-/* ...existing code... */
