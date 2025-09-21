@@ -4,8 +4,8 @@ export async function saveClips(clips){
   try{
     await idbSet("auto-clip-clips", clips.map(c=>({ 
       ...c, 
-      blob: undefined, 
-      rawBlob: undefined, 
+      blob: undefined, // Don't save blob directly
+      rawBlob: undefined, // Don't save rawBlob
       blobUrl: c.blob ? URL.createObjectURL(c.blob) : null 
     })));
   }catch{}
@@ -32,4 +32,3 @@ export async function loadClips(){
   }catch{}
   return [];
 }
-

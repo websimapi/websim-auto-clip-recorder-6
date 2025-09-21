@@ -70,13 +70,17 @@
     <div class="modal-backdrop" id="edit-modal-backdrop" style="display: none;">
       <div class="modal">
         <h3>Edit Clip</h3>
-        <video id="edit-modal-video" controls playsinline></video>
+        <video id="edit-modal-video" playsinline></video>
         <div class="trim-controls">
-          <div id="trim-slider-container"></div>
+          <div id="trim-slider-container">
+            <div id="trim-slider-track"></div>
+            <div id="trim-slider-thumb-start" class="trim-slider-thumb"></div>
+            <div id="trim-slider-thumb-end" class="trim-slider-thumb"></div>
+          </div>
           <div class="trim-times">
-            Start: <span id="trim-start-time">00:00</span>
-            End: <span id="trim-end-time">00:00</span>
-            Duration: <span id="trim-duration">00:00</span>
+            <span>Start: <span id="trim-start-time">00:00</span></span>
+            <span>End: <span id="trim-end-time">00:00</span></span>
+            <span>Duration: <span id="trim-duration">00:00</span></span>
           </div>
         </div>
         <div class="modal-actions">

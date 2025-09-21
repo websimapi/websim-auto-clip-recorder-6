@@ -161,6 +161,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .trim-controls {
   width: 100%;
   padding: 10px 0;
+  user-select: none;
 }
 
 #trim-slider-container {
