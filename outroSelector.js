@@ -24,11 +24,20 @@ export function initOutroSelector(container){
     });
     waveDiv.addEventListener('pointerdown',e=>{ e.preventDefault(); dragging=true; sel={start:toTime(e.offsetX),end:toTime(e.offsetX)}; });
     waveDiv.addEventListener('pointermove',e=>{ if(!dragging) return; sel.end=toTime(e.offsetX); if(bufRef){ const a=Math.min(sel.start,sel.end)*dur,b=Math.max(sel.start,sel.end)*dur; times.textContent=`${a.toFixed(2)}s – ${b.toFixed(2)}s`; }});
-    window.addEventListener('pointerup',()=>{ if(!dragging) return; dragging=false; if(Math.abs(sel.end-sel.start)<0.005){ sel=null; outroSelections.delete(clip.id); times.textContent=`Full clip: ${dur.toFixed(2)}s`; } else { const a=Math.min(sel.start,sel.end)*dur,b=Math.max(sel.start,sel.end)*dur; outroSelections.set(clip.id,{start:a,end:b}); }
+    window.addEventListener('pointerup',()=>{ 
+      if(!dragging) return; 
+      dragging=false; 
+      if(Math.abs(sel.end-sel.start)<0.005){ 
+        sel=null; 
+        outroSelections.delete(clip.id); 
+        times.textContent=`Full clip: ${dur.toFixed(2)}s`; 
+      } else { 
+        const a=Math.min(sel.start,sel.end)*dur, b=Math.max(sel.start,sel.end)*dur; 
+        outroSelections.set(clip.id,{start:a,end:b}); 
+      }
       if(clip.id===selectedOutro.id) selectedOutro.region=outroSelections.get(clip.id)||null;
     });
 
     container.appendChild(card);
   });
 }
-
